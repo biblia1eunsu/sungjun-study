@@ -1,0 +1,123 @@
+(window.STUDY_DAYS = window.STUDY_DAYS || []).push({
+  day: 10,
+  theme: "비례식 · 환전 영어 · 임진왜란과 병자호란",
+  math: {
+    topic: "비례식과 비례배분",
+    intro: "비례식은 두 비가 같다는 식이에요. 안쪽 두 수의 곱과 바깥쪽 두 수의 곱이 같다는 성질을 이용하면 모르는 수를 구할 수 있습니다.",
+    problems: [
+      {
+        level: "복습",
+        q: "3:4 = □:12 일 때 □에 알맞은 수는 얼마일까요?",
+        hint: "4가 12가 되려면 3배가 되었으니, 3도 3배 하면 됩니다.",
+        answer: ["9"],
+        solution: "4 → 12 로 3배가 되었으므로 3도 3배 해서 9입니다. 비례식의 성질로 확인하면 3 × 12 = 4 × □ 이므로 36 = 4□, □ = 9 입니다."
+      },
+      {
+        level: "심화",
+        q: "사탕 180개를 2:3:4로 나눌 때 가장 많이 받는 사람은 몇 개를 받을까요?",
+        hint: "비의 항을 모두 더하면 전체가 몇 묶음인지 알 수 있어요. 2+3+4 = 9 묶음입니다.",
+        answer: ["80", "80개"],
+        solution: "전체를 2+3+4 = 9묶음으로 보면 한 묶음은 180 ÷ 9 = 20개입니다. 가장 많은 사람은 4묶음이므로 20 × 4 = 80개를 받습니다. 비례배분은 '전체 ÷ 묶음 수'로 한 묶음 크기를 먼저 구하면 쉬워요."
+      },
+      {
+        level: "도전",
+        q: "사탕 24개를 형과 동생이 5:3으로 나누어 가질 때 동생이 받는 사탕은 몇 개일까요?",
+        hint: "5+3 = 8묶음입니다. 24를 8로 나누면 한 묶음이 얼마인지 알 수 있어요.",
+        answer: ["9", "9개"],
+        solution: "한 묶음은 24 ÷ 8 = 3개입니다. 동생은 3묶음이므로 3 × 3 = 9개를 받습니다. 확인: 형은 5 × 3 = 15개이고 15 + 9 = 24 로 전체와 맞습니다."
+      }
+    ]
+  },
+  english: {
+    travel: {
+      theme: "환전과 현지 결제",
+      items: [
+        { en: "Where can I exchange money near here?", ko: "이 근처에 환전할 수 있는 곳이 있나요?" },
+        { en: "What is the exchange rate for Korean won today?", ko: "오늘 한국 원화 환율은 어떻게 되나요?" },
+        { en: "Could I have this in smaller bills?", ko: "이것을 작은 단위 지폐로 바꿔 주시겠어요?" },
+        { en: "Is there a fee for using this ATM?", ko: "이 현금인출기를 사용하면 수수료가 있나요?" },
+        { en: "Does this shop accept cards, or only cash?", ko: "이 가게는 카드를 받나요, 아니면 현금만 받나요?" }
+      ]
+    },
+    news: {
+      title: "Why Do Athletes Warm Up?",
+      source: "Junior Times",
+      body: [
+        { en: "Before a game, athletes run and stretch for several minutes.", ko: "경기 전에 운동선수들은 몇 분 동안 달리고 스트레칭을 합니다." },
+        { en: "Warming up raises the temperature of the muscles.", ko: "몸을 푸는 것은 근육의 온도를 높여 줍니다." },
+        { en: "Warmer muscles move faster and stretch more easily.", ko: "따뜻해진 근육은 더 빠르게 움직이고 더 쉽게 늘어납니다." },
+        { en: "It also helps blood carry more oxygen to the legs and arms.", ko: "또한 피가 다리와 팔에 더 많은 산소를 보내도록 도와줍니다." },
+        { en: "So a short warm-up can help you play better and get hurt less.", ko: "그래서 짧게 몸을 풀면 더 잘 뛰고 다치지 않는 데 도움이 됩니다." }
+      ],
+      words: [
+        { w: "athlete", m: "운동선수" },
+        { w: "stretch", m: "스트레칭하다, 늘이다" },
+        { w: "muscle", m: "근육" },
+        { w: "oxygen", m: "산소" },
+        { w: "warm up", m: "몸을 풀다" }
+      ],
+      quiz: [
+        {
+          q: "What does warming up do to muscles?",
+          choices: ["It cools them down", "It raises their temperature", "It makes them smaller", "It makes them sleep"],
+          answer: 1,
+          explain: "몸을 풀면 근육의 온도가 높아진다고 했습니다."
+        },
+        {
+          q: "What is one good result of warming up?",
+          choices: ["You play better and get hurt less", "You get tired faster", "You sleep longer", "You eat more"],
+          answer: 0,
+          explain: "마지막 문장에서 더 잘 뛰고 덜 다친다고 했습니다."
+        }
+      ]
+    }
+  },
+  history: {
+    era: "임진왜란과 병자호란",
+    focus: "1592년 일본의 침입, 1636년 청의 침입",
+    ebs: "https://primary.ebs.co.kr/course/series/list?seriesId=S00069",
+    yt: "EBS 초등 스토리 한국사 임진왜란 병자호란",
+    points: [
+      "1592년 일본이 조선을 침략하면서 임진왜란이 일어났고, 이순신이 바다에서 크게 이겼어요.",
+      "전쟁 중 의병과 승병이 일어났고, 명도 참전해 일본을 밀어냈어요.",
+      "1636년 청의 침입으로 병자호란이 일어나 조선은 청과 굴욕적인 관계를 맺었어요."
+    ],
+    quiz: [
+      { q: "임진왜란이 일어난 해는?", choices: ["1592년", "1636년", "1894년", "1910년"], answer: 0, explain: "1592년 일본이 조선을 침략했습니다." },
+      { q: "임진왜란 때 바다에서 크게 이긴 장군은?", choices: ["이순신", "강감찬", "을지문덕", "권율"], answer: 0, explain: "이순신은 한산도 등에서 일본 수군을 크게 물리쳤습니다." },
+      { q: "전쟁 중 백성이 스스로 일어난 군대는?", choices: ["의병", "별무반", "훈련도감", "삼별초"], answer: 0, explain: "백성이 스스로 무기를 들어 싸운 군대를 의병이라고 합니다." },
+      { q: "승려들이 전쟁에서 맡은 역할은?", choices: ["승병으로 싸움", "무역을 함", "세금을 걷음", "과거를 주관함"], answer: 0, explain: "유정, 처영 등 승려들이 승병을 조직해 전쟁에 참여했습니다." },
+      { q: "임진왜란 중 조선을 도운 나라는?", choices: ["명", "청", "발해", "거란"], answer: 0, explain: "조선의 요청으로 명이 참전해 일본을 물리쳤습니다." },
+      { q: "병자호란이 일어난 해는?", choices: ["1636년", "1592년", "1811년", "1920년"], answer: 0, explain: "1636년 청이 조선을 침략해 병자호란이 일어났습니다." },
+      { q: "병자호란 뒤 맺은 굴욕적 사건은?", choices: ["삼전도의 굴욕", "위화도 회군", "갑신정변", "4·19 혁명"], answer: 0, explain: "인조가 남한산성에서 항복하고 청과 굴욕적인 약속을 맺었습니다." },
+      { q: "병자호란 때 인조가 피신한 곳은?", choices: ["남한산성", "강화도", "한양", "평양"], answer: 0, explain: "인조는 남한산성에서 47일 동안 항전했습니다." },
+      { q: "임진왜란의 결과로 알맞은 것은?", choices: ["인구와 문화재 손실, 나라 재정 피폐", "조선이 더 부유해짐", "일본이 조선을 지배함", "영토가 크게 늘어남"], answer: 0, explain: "오랜 전쟁으로 많은 사람이 다치거나 죽고 문화유산도 잃었습니다." },
+      { q: "두 전쟁을 묶어 부르는 말로 알맞은 것은?", choices: ["양란", "삼란", "난세", "왜란 한 번"], answer: 0, explain: "임진왜란과 병자호란을 함께 '양란'이라고 부릅니다." }
+    ]
+  },
+  person: {
+    name: "마리 퀴리",
+    life: "1867 ~ 1934",
+    tag: "폴란드 출신 과학자 · 라듐·폴로늄",
+    summary: "마리 퀴리는 방사능을 연구한 과학자입니다. 라듐과 폴로늄을 발견했고, 노벨상을 두 번 받은 첫 과학자가 되었습니다.",
+    facts: [
+      "방사능이라는 말을 처음 쓴 사람 가운데 한 명이에요.",
+      "폴로늄과 라듐을 발견했고, 라듐은 의학 치료에 쓰이게 되었어요.",
+      "1903년 노벨 물리학상, 1911년 노벨 화학상을 받았습니다.",
+      "연구를 계속하다 건강이 나빠져 1934년에 세상을 떠났습니다."
+    ],
+    quiz: [
+      { q: "마리 퀴리가 발견한 원소가 아닌 것은?", choices: ["라듐", "폴로늄", "산소", "폴로늄과 라듐 모두 아님"], answer: 2, explain: "산소는 마리 퀴리 이전에 발견된 원소입니다." },
+      { q: "마리 퀴리의 노벨상 수상으로 알맞은 것은?", choices: ["물리학상과 화학상을 모두 받음", "평화상만 받음", "한 번도 받지 못함", "문학상만 받음"], answer: 0, explain: "1903년 물리학상, 1911년 화학상을 받아 처음으로 두 번 수상한 과학자가 되었습니다." }
+    ]
+  },
+  science: {
+    title: "전기와 자기, 그리고 발전기",
+    summary: "자석 곁에서 코일이 움직이면 전기가 생깁니다. 이 원리로 전기를 만들고, 반대로 전기로 힘을 냅니다.",
+    body: "도선에 전류가 흐르면 그 주변에 자기장이 생겨요. 반대로 자석을 코일 근처에서 움직이면 코일 속을 지나는 자기장이 변하면서 전류가 흐릅니다. 이것을 전자기 유도라고 하지요. 여러분이 쓰는 충전기는 이 원리로 전기를 다른 형태로 바꾸고, 수력이나 풍력으로 돌린 터빈도 이 원리로 전기를 만듭니다. 그래서 우리는 움직임에서 전기를, 전기에서 다시 힘과 빛을 얻습니다.",
+    quiz: [
+      { q: "전자기 유도란 무엇인가요?", choices: ["자기장이 변해 전류가 흐르는 것", "불이 나는 것", "물이 끓는 것", "빛이 반사되는 것"], answer: 0, explain: "자기장의 변화로 전류가 흐르는 현상입니다." },
+      { q: "발전기는 무엇을 전기로 바꾸나요?", choices: ["움직임(운동 에너지)", "소리만", "종이", "물의 무게만"], answer: 0, explain: "터빈을 돌리는 움직임이 전자기 유도로 전기를 만듭니다." }
+    ]
+  }
+});

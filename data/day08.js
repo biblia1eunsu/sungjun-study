@@ -1,0 +1,123 @@
+(window.STUDY_DAYS = window.STUDY_DAYS || []).push({
+  day: 8,
+  theme: "최소공배수 · 서핑 영어 · 조선 건국과 세종",
+  math: {
+    topic: "최소공배수와 그 활용",
+    intro: "두 수의 공통인 배수 중 가장 작은 수가 최소공배수예요. '다시 만나는 때'를 묻는 문제에서는 최소공배수를 찾습니다.",
+    problems: [
+      {
+        level: "복습",
+        q: "8과 12의 최소공배수는 얼마일까요?",
+        hint: "8의 배수와 12의 배수를 작은 것부터 적어 보세요. 8 = 2³, 12 = 2² × 3 입니다.",
+        answer: ["24"],
+        solution: "8의 배수는 8, 16, 24, 32 …, 12의 배수는 12, 24, 36 … 이므로 공통인 가장 작은 수는 24입니다. 소인수분해로는 2³ × 3 = 24 로 구할 수 있어요."
+      },
+      {
+        level: "심화",
+        q: "6, 10, 15의 최소공배수는 얼마일까요?",
+        hint: "6 = 2 × 3, 10 = 2 × 5, 15 = 3 × 5 입니다. 각 소인수를 가장 많이 쓰인 지수로 모아 보세요.",
+        answer: ["30"],
+        solution: "세 수를 소인수분해하면 6 = 2×3, 10 = 2×5, 15 = 3×5 입니다. 각 소인수의 가장 큰 지수를 택하면 2 × 3 × 5 = 30 입니다. 확인: 30은 6, 10, 15로 모두 나누어떨어져요."
+      },
+      {
+        level: "도전",
+        q: "5로 나누어도 3이 남고, 7로 나누어도 3이 남는 자연수 중에서 가장 작은 수는 얼마일까요?",
+        hint: "5와 7의 최소공배수를 먼저 구하고, 나머지 3을 더해 보세요.",
+        answer: ["38"],
+        solution: "구하는 수에서 3을 빼면 5로도 7로도 나누어떨어집니다. 5와 7의 최소공배수는 35이므로 가장 작은 수는 35 + 3 = 38 입니다. 확인: 38 ÷ 5 = 7 나머지 3, 38 ÷ 7 = 5 나머지 3 이에요."
+      }
+    ]
+  },
+  english: {
+    travel: {
+      theme: "서핑 강습",
+      items: [
+        { en: "We would like to take a beginner surfing lesson.", ko: "초보자 서핑 강습을 받고 싶어요." },
+        { en: "How long does the lesson take?", ko: "수업은 얼마나 걸리나요?" },
+        { en: "Do you have life jackets for children?", ko: "아이용 구명조끼가 있나요?" },
+        { en: "Could you show us how to stand on the board?", ko: "보드 위에 서는 방법을 보여 주시겠어요?" },
+        { en: "Where is it safe to swim today?", ko: "오늘은 어디에서 수영하는 것이 안전한가요?" }
+      ]
+    },
+    news: {
+      title: "Students Build Robots to Help Their Town",
+      source: "Junior Times",
+      body: [
+        { en: "A group of students made a small robot that picks up trash in the park.", ko: "한 학생 모둠이 공원에서 쓰레기를 줍는 작은 로봇을 만들었습니다." },
+        { en: "The robot uses a camera to find bottles and cans.", ko: "그 로봇은 카메라를 이용해 병과 캔을 찾습니다." },
+        { en: "It took the team six months to build and test it.", ko: "그 모둠이 로봇을 만들고 시험하는 데 6개월이 걸렸습니다." },
+        { en: "At first, the robot often stopped in front of a tree.", ko: "처음에는 로봇이 나무 앞에서 자주 멈췄습니다." },
+        { en: "Now it can clean one park in about two hours.", ko: "이제는 약 두 시간 만에 공원 하나를 청소할 수 있습니다." }
+      ],
+      words: [
+        { w: "robot", m: "로봇" },
+        { w: "trash", m: "쓰레기" },
+        { w: "team", m: "모둠, 팀" },
+        { w: "test", m: "시험하다" },
+        { w: "at first", m: "처음에는" }
+      ],
+      quiz: [
+        {
+          q: "What does the robot do?",
+          choices: ["It waters plants", "It picks up trash", "It teaches math", "It drives a bus"],
+          answer: 1,
+          explain: "공원에서 쓰레기를 줍는 로봇이라고 했습니다."
+        },
+        {
+          q: "What problem did the robot have at first?",
+          choices: ["It stopped in front of a tree", "It could not move", "It was too heavy", "It made too much noise"],
+          answer: 0,
+          explain: "'At first, the robot often stopped in front of a tree'라고 했습니다."
+        }
+      ]
+    }
+  },
+  history: {
+    era: "조선의 건국과 세종",
+    focus: "이성계의 건국, 한양 도읍, 세종의 업적",
+    ebs: "https://primary.ebs.co.kr/course/series/list?seriesId=S00069",
+    yt: "EBS 초등 스토리 한국사 조선 건국 세종",
+    points: [
+      "이성계는 위화도 회군 뒤 1392년 조선을 세우고 한양으로 도읍을 옮겼어요.",
+      "세종은 훈민정음을 만들고 집현전을 두어 학문을 장려했으며 4군 6진을 개척했어요.",
+      "조선은 유교를 바탕으로 나라를 다스렸고, 정도전이 《조선경국전》을 지었어요."
+    ],
+    quiz: [
+      { q: "조선을 세운 사람은?", choices: ["이성계", "왕건", "대조영", "이순신"], answer: 0, explain: "이성계는 1392년 조선을 세웠습니다." },
+      { q: "이성계가 회군한 곳은?", choices: ["위화도", "한산도", "노량", "강화도"], answer: 0, explain: "위화도 회군으로 정치 흐름이 바뀌고 조선 건국의 바탕이 마련되었습니다." },
+      { q: "조선이 도읍한 곳은?", choices: ["한양", "개경", "평양", "경주"], answer: 0, explain: "조선은 한양(지금의 서울)으로 도읍을 옮겼습니다." },
+      { q: "세종이 학자들을 모아 둔 기관은?", choices: ["집현전", "훈련도감", "성균관", "규장각"], answer: 0, explain: "집현전은 세종 때 학문 연구와 저술을 담당한 기관입니다." },
+      { q: "세종이 북쪽으로 개척한 것은?", choices: ["4군 6진", "9주 5소경", "23부", "청해진"], answer: 0, explain: "세종은 4군 6진을 두어 북쪽 영토를 지키고 넓혔습니다." },
+      { q: "훈민정음이 반포된 해는?", choices: ["1446년", "1392년", "1592년", "1897년"], answer: 0, explain: "세종은 1446년 백성이 쉽게 글을 읽도록 훈민정음을 반포했습니다." },
+      { q: "조선 건국을 도운 인물이 지은 책은?", choices: ["정도전의 조선경국전", "최승로의 시무 28조", "허준의 동의보감", "정약용의 목민심서"], answer: 0, explain: "정도전은 《조선경국전》에서 새 나라의 통치 원리를 제시했습니다." },
+      { q: "조선이 나라를 다스리는 바탕으로 삼은 사상은?", choices: ["유교", "불교만", "도교만", "이슬람교"], answer: 0, explain: "조선은 유교를 통치의 기본으로 삼았습니다." },
+      { q: "세종 때 만든 물시계는?", choices: ["자격루", "측우기", "앙부일구", "혼천의"], answer: 0, explain: "자격루는 스스로 종을 쳐 시간을 알려 주는 물시계입니다." },
+      { q: "조선 왕조의 통치 규칙을 정리한 법전은?", choices: ["경국대전", "8조법", "훈요 10조", "삼강행실도"], answer: 0, explain: "《경국대전》은 성종 때 완성된 조선의 법전입니다." }
+    ]
+  },
+  person: {
+    name: "장영실",
+    life: "? ~ 1450년경",
+    tag: "조선의 과학자 · 발명가",
+    summary: "장영실은 세종 때 과학 기구와 발명품을 만든 천재 기술자입니다. 신분은 노비였지만 실력으로 벼슬에 올랐습니다.",
+    facts: [
+      "측우기, 자격루, 앙부일구 같은 기구를 만들었어요.",
+      "물의 높이로 시간을 알려 주는 자격루를 완성했습니다.",
+      "해시계 앙부일구로 백성도 시간을 알 수 있게 했어요.",
+      "세종이 장영실을 아껴 정3품까지 오를 수 있게 했습니다."
+    ],
+    quiz: [
+      { q: "장영실이 만든 해시계는?", choices: ["앙부일구", "측우기", "자격루", "거중기"], answer: 0, explain: "앙부일구는 해의 그림자로 시간을 알려 주는 해시계입니다." },
+      { q: "장영실의 신분으로 알맞은 것은?", choices: ["노비였다가 실력으로 벼슬함", "처음부터 왕족", "장군 출신", "외국인"], answer: 0, explain: "장영실은 노비 신분이었지만 뛰어난 기술로 벼슬에 올랐습니다." }
+    ]
+  },
+  science: {
+    title: "미세플라스틱: 눈에 보이지 않는 쓰레기",
+    summary: "5 mm보다 작은 플라스틱을 미세플라스틱이라고 합니다. 바다와 물, 심지어 우리 몸에서도 발견됩니다.",
+    body: "비닐봉지나 페트병이 햇빛과 파도에 부서지면 아주 작은 조각으로 나뉘어요. 이것이 미세플라스틱입니다. 크기가 작아 정수 시설에서 걸러지기 어렵고, 물고기와 조개가 먹이로 착각해 먹기도 합니다. 물병을 다시 쓰고, 일회용 빨대를 줄이고, 옷을 세탁할 때 나오는 미세 섬유를 조금이라도 줄이는 일이 도움이 됩니다. 완벽하지 않아도 여러 사람이 함께 하면 차이가 커집니다.",
+    quiz: [
+      { q: "미세플라스틱이란?", choices: ["5 mm보다 작은 플라스틱", "큰 비닐봉지", "유리 조각", "플라스틱을 만드는 기계"], answer: 0, explain: "5 mm보다 작은 플라스틱 알갱이를 미세플라스틱이라고 합니다." },
+      { q: "미세플라스틱이 문제가 되는 까닭은?", choices: ["아주 작아 걸러지기 어렵고 동물이 먹기 때문", "너무 무거워서", "빛을 내서", "물에 녹아서"], answer: 0, explain: "작아서 걸러지기 어렵고 물고기 등이 먹이로 착각합니다." }
+    ]
+  }
+});
