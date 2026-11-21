@@ -52,8 +52,7 @@ body {
 
 /* ---------- header ---------- */
 .top {
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 20;
   background: linear-gradient(160deg, var(--navy) 0%, #122c4d 55%, #0d5f58 100%);
   color: #fff;
