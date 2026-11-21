@@ -66,6 +66,19 @@
     return (gap % CYCLE) + 1;
   }
 
+  function studiedDates() {
+    return Object.keys(S.records).filter(function (k) {
+      var r = S.records[k];
+      return r && r.ans && Object.keys(r.ans).length > 0;
+    });
+  }
+
+  // 이어서 풀 날짜: 지금까지 공부한 날 수 + 1 (14일차를 넘으면 14일차에서 반복)
+  function nextDayNumber() {
+    var n = studiedDates().length + 1;
+    return Math.min(CYCLE, Math.max(1, n));
+  }
+
   function cur() {
     var key = todayKey();
     if (!S.records[key]) {
@@ -74,7 +87,7 @@
     var rec = S.records[key];
     if (!rec.ans) rec.ans = {};
     if (!rec.seen) rec.seen = {};
-    if (!rec.day) rec.day = S.day || recommendedDay();
+    if (!rec.day) rec.day = nextDayNumber();
     return rec;
   }
 
