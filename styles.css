@@ -62,6 +62,7 @@ body {
 }
 
 .top-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.top-row, .stats, .dayswitch { width: 100%; max-width: 720px; margin-left: auto; margin-right: auto; }
 .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .brand-mark { display: inline-flex; flex: none; }
 .brand-text h1 { margin: 0; font-size: 19px; font-weight: 800; letter-spacing: -.02em; }
@@ -118,6 +119,8 @@ body {
   position: sticky; top: 0; z-index: 15;
   display: flex; gap: 8px;
   padding: 12px 16px 10px;
+  max-width: 720px;
+  margin: 0 auto;
   overflow-x: auto;
   background: var(--bg);
   scrollbar-width: none;
