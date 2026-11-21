@@ -369,7 +369,7 @@
     html += '</section>';
 
     html += '<div class="section-head"><h2>독해 확인 퀴즈</h2><span>2문항</span></div>';
-    html += '<section class="card">' + quizHtml(n.quiz, 'eq', rec) + '</section>';
+    html += '<section class="card">' + quizHtml(quizList('eq'), 'eq', rec) + '</section>';
 
     html += doneFlag('english');
     return html;
@@ -396,7 +396,7 @@
     html += '</section>';
 
     html += '<div class="section-head"><h2>핵심 퀴즈 10문제</h2><span>답을 고르면 바로 채점돼요</span></div>';
-    html += '<section class="card">' + quizHtml(h.quiz, 'h', rec) + scoreRow(rec, 'h', 10) + '</section>';
+    html += '<section class="card">' + quizHtml(quizList('h'), 'h', rec) + scoreRow(rec, 'h', 10) + '</section>';
     html += doneFlag('history');
     return html;
   }
@@ -420,7 +420,7 @@
     html += '</section>';
 
     html += '<div class="section-head"><h2>확인 퀴즈</h2><span>2문항</span></div>';
-    html += '<section class="card">' + quizHtml(p.quiz, 'p', rec) + '</section>';
+    html += '<section class="card">' + quizHtml(quizList('p'), 'p', rec) + '</section>';
     html += doneFlag('person');
     return html;
   }
@@ -442,12 +442,59 @@
     html += '</section>';
 
     html += '<div class="section-head"><h2>상식 퀴즈</h2><span>2문항</span></div>';
-    html += '<section class="card">' + quizHtml(s.quiz, 's', rec) + '</section>';
+    html += '<section class="card">' + quizHtml(quizList('s'), 's', rec) + '</section>';
     html += doneFlag('science');
     return html;
   }
 
   /* ---------------- shared quiz rendering ---------------- */
+
+  // 문제마다 정답 위치를 고르게 섞기 (같은 날·같은 문제는 항상 같은 순서)
+  function hashSeed(str) {
+    var h = 2166136261;
+    for (var i = 0; i < str.length; i++) {
+      h ^= str.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return h >>> 0;
+  }
+
+  function rng(seed) {
+    return function () {
+      seed |= 0;
+      seed = seed + 0x6D2B79F5 | 0;
+      var t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+
+  function shuffledQuiz(quiz, seedBase) {
+    return quiz.map(function (q, qi) {
+      var r = rng(hashSeed(seedBase + ':' + qi));
+      var order = q.choices.map(function (c, i) { return i; });
+      for (var i = order.length - 1; i > 0; i--) {
+        var j = Math.floor(r() * (i + 1));
+        var tmp = order[i]; order[i] = order[j]; order[j] = tmp;
+      }
+      return {
+        q: q.q,
+        choices: order.map(function (i) { return q.choices[i]; }),
+        answer: order.indexOf(q.answer),
+        explain: q.explain
+      };
+    });
+  }
+
+  function quizList(prefix) {
+    var d = thisDay();
+    var base = 'd' + d.day + ':' + prefix;
+    if (prefix === 'eq') return shuffledQuiz(d.english.news.quiz, base);
+    if (prefix === 'h') return shuffledQuiz(d.history.quiz, base);
+    if (prefix === 'p') return shuffledQuiz(d.person.quiz, base);
+    if (prefix === 's') return shuffledQuiz(d.science.quiz, base);
+    return null;
+  }
 
   function quizHtml(quiz, prefix, rec) {
     var letters = ['A', 'B', 'C', 'D', 'E'];
@@ -679,14 +726,9 @@
   });
 
   function findQuiz(key) {
-    var d = thisDay();
     var prefix = key.replace(/\d+$/, '');
     var idx = Number(key.replace(/\D+/g, ''));
-    var list = null;
-    if (prefix === 'eq') list = d.english.news.quiz;
-    else if (prefix === 'h') list = d.history.quiz;
-    else if (prefix === 'p') list = d.person.quiz;
-    else if (prefix === 's') list = d.science.quiz;
+    var list = quizList(prefix);
     if (!list || !list[idx]) return null;
     return list[idx];
   }

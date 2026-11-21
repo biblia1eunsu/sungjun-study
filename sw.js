@@ -1,5 +1,5 @@
 /* 성준이 공부방 - 오프라인 대비 서비스 워커 */
-var CACHE = 'sungjun-study-v7';
+var CACHE = 'sungjun-study-v8';
 var ASSETS = [
   './',
   'index.html',
