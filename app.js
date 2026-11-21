@@ -6,10 +6,11 @@
   var STORE_KEY = 'sungjun-study-v1';
   var MOM_TOPIC = 'https://ntfy.sh/biblia-sj-mom-202611';
   var KID_TOPIC = 'https://ntfy.sh/biblia-sj-kid-202611';
-  var CYCLE = 14;
+  var CYCLE = 30;
 
   var SUBJECTS = [
     { key: 'math', label: '수학' },
+    { key: 'korean', label: '국어' },
     { key: 'english', label: '영어' },
     { key: 'history', label: '한국사' },
     { key: 'person', label: '위인' },
@@ -73,7 +74,7 @@
     });
   }
 
-  // 이어서 풀 날짜: 지금까지 공부한 날 수 + 1 (14일차를 넘으면 14일차에서 반복)
+  // 이어서 풀 날짜: 지금까지 공부한 날 수 + 1 (30일차를 넘으면 30일차에서 반복)
   function nextDayNumber() {
     var n = studiedDates().length + 1;
     return Math.min(CYCLE, Math.max(1, n));
@@ -159,13 +160,14 @@
   function doneOf(rec) {
     var a = rec.ans, seen = rec.seen || {};
     var math = [0, 1, 2].every(function (i) { return a['m' + i] !== undefined; });
+    var korean = [0, 1, 2].every(function (i) { return a['k' + i] !== undefined; });
     var travel = [0, 1, 2, 3, 4].every(function (i) { return !!seen['t' + i]; });
     var english = travel && a.eq0 !== undefined && a.eq1 !== undefined;
     var history = true;
     for (var i = 0; i < 10; i++) { if (a['h' + i] === undefined) { history = false; break; } }
     var person = a.p0 !== undefined && a.p1 !== undefined;
     var science = a.s0 !== undefined && a.s1 !== undefined;
-    return { math: math, english: english, history: history, person: person, science: science };
+    return { math: math, korean: korean, english: english, history: history, person: person, science: science };
   }
 
   function progressNow() {
@@ -182,7 +184,7 @@
       var r = S.records[key];
       if (!r) return false;
       var dn = doneOf(r);
-      return dn.math || dn.english || dn.history || dn.person || dn.science;
+      return dn.math || dn.korean || dn.english || dn.history || dn.person || dn.science;
     }
     if (!studied(dateKey(d))) d.setDate(d.getDate() - 1);
     var guard = 0;
@@ -220,11 +222,11 @@
     var d = thisDay();
     document.getElementById('todayText').textContent =
       now.getFullYear() + '년 ' + (now.getMonth() + 1) + '월 ' + now.getDate() + '일 ' + WEEKDAY[now.getDay()] +
-      ' · 2주 코스 ' + CYCLE + '일 중 ' + d.day + '일차';
+      ' · 한 달 코스 ' + CYCLE + '일 중 ' + d.day + '일차';
 
     var p = progressNow();
-    document.getElementById('progText').textContent = p.count + ' / 5';
-    document.getElementById('progBar').style.width = (p.count / 5 * 100) + '%';
+    document.getElementById('progText').textContent = p.count + ' / ' + SUBJECTS.length;
+    document.getElementById('progBar').style.width = (p.count / SUBJECTS.length * 100) + '%';
     var bar = document.querySelector('.bar');
     if (bar) bar.setAttribute('aria-valuenow', String(p.count));
 
@@ -248,10 +250,10 @@
     }
 
     var hint = document.getElementById('notifyHint');
-    if (p.count === 5) {
-      hint.textContent = '5과목 모두 끝냈어요. 알림을 보내면 엄마 폰으로 알림이 가요.';
+    if (p.count === SUBJECTS.length) {
+      hint.textContent = SUBJECTS.length + '과목 모두 끝냈어요. 알림을 보내면 엄마 폰으로 알림이 가요.';
     } else {
-      hint.textContent = '오늘 ' + (5 - p.count) + '과목이 남았어요. 다 끝내면 자동으로 알림이 가요.';
+      hint.textContent = '오늘 ' + (SUBJECTS.length - p.count) + '과목이 남았어요. 다 끝내면 자동으로 알림이 가요.';
     }
   }
 
@@ -447,6 +449,56 @@
     return html;
   }
 
+  /* ---------------- render: korean ---------------- */
+
+  function renderKorean() {
+    var d = thisDay();
+    var k = d.korean;
+    var rec = cur();
+    var list = quizList('k');
+    var html = '';
+
+    if (!k) {
+      return '<section class="card"><p class="q">오늘 국어 자료를 준비 중이에요.</p></section>';
+    }
+
+    html += '<section class="card">';
+    html += '<span class="eyebrow">문법 · 어휘 포인트</span>';
+    html += '<h2 class="topic-title">' + esc(k.grammar.title) + '</h2>';
+    html += '<p class="lead">' + esc(k.grammar.point) + '</p>';
+    if (k.grammar.examples && k.grammar.examples.length) {
+      html += '<ul class="points">' + k.grammar.examples.map(function (e) {
+        return '<li>' + esc(e) + '</li>';
+      }).join('') + '</ul>';
+    }
+    if (k.grammar.words && k.grammar.words.length) {
+      html += '<div class="words">' + k.grammar.words.map(function (w) {
+        return '<span class="word"><b>' + esc(w.w) + '</b><span>' + esc(w.m) + '</span></span>';
+      }).join('') + '</div>';
+    }
+    html += '</section>';
+
+    html += '<div class="section-head"><h2>문법 확인 퀴즈</h2><span>1문항</span></div>';
+    html += '<section class="card">' + quizHtml(list, 'k', rec, 0, 1) + '</section>';
+
+    var r = k.reading;
+    html += '<div class="section-head"><h2>' + (r.kind === '문학' ? '오늘의 문학 지문' : '오늘의 비문학 지문') +
+      '</h2><span>' + esc(r.genre) + '</span></div>';
+    html += '<section class="card">';
+    html += '<span class="eyebrow">' + esc(r.kind) + ' · ' + esc(r.genre) + '</span>';
+    html += '<h3 class="news-title">' + esc(r.title) + '</h3>';
+    html += '<p class="news-meta">' + esc(r.source) + '</p>';
+    (r.body || []).forEach(function (p) {
+      html += '<p class="' + (r.verse ? 'verse-line' : 'body-text') + '">' + esc(p) + '</p>';
+    });
+    html += '</section>';
+
+    html += '<div class="section-head"><h2>문해력 독해 퀴즈</h2><span>2문항</span></div>';
+    html += '<section class="card">' + quizHtml(list, 'k', rec, 1, 3) + '</section>';
+    html += doneFlag('korean');
+    return html;
+  }
+
   /* ---------------- shared quiz rendering ---------------- */
 
   // 문제마다 정답 위치를 고르게 섞기 (같은 날·같은 문제는 항상 같은 순서)
@@ -486,9 +538,16 @@
     });
   }
 
+  // 국어는 문법 확인 1문항 + 독해 2문항 = 3문항을 k0~k2 키로 함께 채점
+  function koreanQuiz(d) {
+    if (!d.korean) return [];
+    return [d.korean.grammar.quiz].concat(d.korean.reading.questions);
+  }
+
   function quizList(prefix) {
     var d = thisDay();
     var base = 'd' + d.day + ':' + prefix;
+    if (prefix === 'k') return shuffledQuiz(koreanQuiz(d), base);
     if (prefix === 'eq') return shuffledQuiz(d.english.news.quiz, base);
     if (prefix === 'h') return shuffledQuiz(d.history.quiz, base);
     if (prefix === 'p') return shuffledQuiz(d.person.quiz, base);
@@ -496,14 +555,19 @@
     return null;
   }
 
-  function quizHtml(quiz, prefix, rec) {
+  // from~to 구간만 그린다. 번호는 구간 안에서 1부터, 채점 키는 전체 순번(k0~k2) 그대로.
+  function quizHtml(quiz, prefix, rec, from, to) {
     var letters = ['A', 'B', 'C', 'D', 'E'];
-    return quiz.map(function (q, qi) {
+    var start = from || 0;
+    var end = to === undefined ? quiz.length : Math.min(to, quiz.length);
+    var out = '';
+    for (var qi = start; qi < end; qi++) {
+      var q = quiz[qi];
       var key = prefix + qi;
       var picked = rec.ans[key];
       var answered = picked !== undefined;
-      var out = '<div class="quiz-q">';
-      out += '<p class="quiz-prompt">' + (qi + 1) + '. ' + esc(q.q) + '</p>';
+      out += '<div class="quiz-q">';
+      out += '<p class="quiz-prompt">' + (qi - start + 1) + '. ' + esc(q.q) + '</p>';
       out += '<div class="choices">';
       q.choices.forEach(function (c, ci) {
         var cls = 'choice';
@@ -520,8 +584,8 @@
         out += '<div class="explain"><b>' + (picked === q.answer ? '정답' : '아쉬워요') + '</b> · ' + esc(q.explain) + '</div>';
       }
       out += '</div>';
-      return out;
-    }).join('');
+    }
+    return out;
   }
 
   function scoreRow(rec, prefix, total) {
@@ -543,6 +607,7 @@
     renderTabs();
     var html = '';
     if (activeTab === 'math') html = renderMath();
+    else if (activeTab === 'korean') html = renderKorean();
     else if (activeTab === 'english') html = renderEnglish();
     else if (activeTab === 'history') html = renderHistory();
     else if (activeTab === 'person') html = renderPerson();
@@ -600,7 +665,9 @@
     var doneList = SUBJECTS.filter(function (s) { return dn[s.key]; }).map(function (s) { return s.label; });
     var lines = [];
     lines.push(todayKey() + ' · ' + d.day + '일차 공부 기록');
-    lines.push('완료 과목(' + doneList.length + '/5): ' + (doneList.length ? doneList.join(', ') : '아직 없음'));
+    lines.push('완료 과목(' + doneList.length + '/' + SUBJECTS.length + '): ' + (doneList.length ? doneList.join(', ') : '아직 없음'));
+    var ks = scoreOf(rec, 'k', 3);
+    if (ks.answered) lines.push('국어 문법·독해: ' + ks.correct + '/' + 3 + ' 정답');
     var hs = scoreOf(rec, 'h', 10);
     if (hs.answered) lines.push('한국사 퀴즈: ' + hs.correct + '/' + 10 + ' 정답');
     var ms = scoreOf(rec, 'm', 3);
@@ -628,7 +695,7 @@
       rec.notified = true;
       saveState();
       renderHeader();
-      toast(auto ? '5과목 완료! 엄마에게 알림을 보냈어요.' : '엄마에게 알림을 보냈어요.');
+      toast(auto ? SUBJECTS.length + '과목 완료! 엄마에게 알림을 보냈어요.' : '엄마에게 알림을 보냈어요.');
       return true;
     }).catch(function (err) {
       btn.disabled = false;
@@ -738,7 +805,7 @@
     var rec = cur();
     if (rec.notified) return;
     var p = progressNow();
-    if (p.count !== 5) return;
+    if (p.count !== SUBJECTS.length) return;
     clearTimeout(autoTimer);
     autoTimer = setTimeout(function () {
       if (!cur().notified) notifyMom(true);
