@@ -863,7 +863,7 @@
     render();
 
     if ('serviceWorker' in navigator && location.protocol === 'https:') {
-      navigator.serviceWorker.register('sw.js').catch(function () { /* 오프라인 캐시는 없어도 동작 */ });
+      navigator.serviceWorker.register('./sw.js').catch(function () { /* 오프라인 캐시는 없어도 동작 */ });
     }
   }
 

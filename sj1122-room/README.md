@@ -2,7 +2,7 @@
 
 초5 성준이의 2026 겨울방학 한 달(30일) 공부방입니다. 하루에 여섯 과목을 조금씩 합니다.
 
-배포 주소: https://biblia1eunsu.github.io/sungjun-study/
+배포 주소: https://biblia1eunsu.github.io/sungjun-study/sj1122-room/
 
 ## 하루 구성
 
