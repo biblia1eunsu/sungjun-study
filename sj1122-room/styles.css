@@ -352,6 +352,74 @@ html[data-theme="dark"] .link-btn.primary { color: #05221d; }
   font-size: 12.5px; font-weight: 800; color: var(--ok);
 }
 
+/* ---------- 김주혜 국어 쇼츠 (하루 1편) ---------- */
+.shorts-card { padding-bottom: 18px; }
+.shorts-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.shorts-count { flex: none; font-size: 12px; font-weight: 800; color: var(--ink-soft); }
+.shorts-title { margin: 8px 0 0; font-size: 17px; font-weight: 800; letter-spacing: -.02em; line-height: 1.4; }
+.shorts-kicker { margin: 4px 0 0; font-size: 12.5px; font-weight: 700; color: var(--emerald); }
+
+.shorts-frame {
+  position: relative;
+  margin: 14px auto 0;
+  width: min(100%, 330px);
+  aspect-ratio: 9 / 16;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #0b1220;
+  box-shadow: 0 10px 26px rgba(10, 24, 46, .22);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.shorts-frame:active { transform: scale(.995); }
+.shorts-frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.shorts-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.shorts-frame.is-playing { cursor: default; }
+.shorts-frame.is-playing:active { transform: none; }
+.shorts-play {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: 60px; height: 60px; border-radius: 99px;
+  display: grid; place-items: center;
+  background: rgba(226, 44, 44, .94); color: #fff;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .38);
+  padding-left: 3px;
+}
+.shorts-tag {
+  position: absolute; left: 10px; top: 10px;
+  font-size: 10.5px; font-weight: 800; letter-spacing: .06em;
+  padding: 3px 8px; border-radius: 99px;
+  background: rgba(0, 0, 0, .58); color: #fff;
+}
+
+.shorts-actions { display: flex; gap: 8px; margin-top: 14px; }
+.shorts-actions .btn, .shorts-actions .link-btn { flex: 1 1 0; justify-content: center; min-width: 0; padding-left: 10px; padding-right: 10px; }
+.btn.done-btn { background: var(--emerald); }
+html[data-theme="dark"] .btn.done-btn { color: #05221d; }
+.btn[disabled] { opacity: .6; cursor: default; }
+
+.shorts-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 14px; font-size: 12.5px; color: var(--ink-soft); font-weight: 700; }
+.shorts-bar { margin-top: 7px; height: 6px; border-radius: 99px; background: var(--line); overflow: hidden; }
+.shorts-bar i { display: block; height: 100%; width: 0; border-radius: 99px; transition: width .35s ease; }
+
+.shorts-rows { padding-top: 6px; padding-bottom: 6px; }
+.shorts-row {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  padding: 9px 0; text-align: left;
+  border: 0; border-top: 1px solid var(--line);
+  background: transparent; color: var(--ink); font: inherit; cursor: pointer;
+}
+.shorts-row:first-child { border-top: none; }
+.shorts-row img { flex: none; width: 44px; height: 59px; object-fit: cover; border-radius: 9px; background: #0b1220; }
+.shorts-row .r-num { flex: none; width: 24px; text-align: center; font-size: 11.5px; font-weight: 800; color: var(--ink-soft); }
+.shorts-row .r-body { flex: 1 1 auto; min-width: 0; }
+.shorts-row .r-title { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 13.5px; font-weight: 700; line-height: 1.4; }
+.shorts-row .r-date { display: block; margin-top: 2px; font-size: 11.5px; color: var(--ink-soft); }
+.shorts-note { margin: 12px 2px 4px; font-size: 12px; color: var(--ink-soft); }
+
+@media (min-width: 600px) {
+  .shorts-frame { width: 330px; }
+}
+
 /* action bar */
 .actionbar {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;

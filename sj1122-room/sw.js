@@ -1,5 +1,5 @@
 /* 성준이 공부방 - 오프라인 대비 서비스 워커 */
-var CACHE = 'sungjun-study-v10';
+var CACHE = 'sungjun-study-v11';
 var ASSETS = [
   './',
   './index.html',
@@ -15,7 +15,8 @@ var ASSETS = [
   './data/day11.js', './data/day12.js', './data/day13.js', './data/day14.js', './data/day15.js',
   './data/day16.js', './data/day17.js', './data/day18.js', './data/day19.js', './data/day20.js',
   './data/day21.js', './data/day22.js', './data/day23.js', './data/day24.js', './data/day25.js',
-  './data/day26.js', './data/day27.js', './data/day28.js', './data/day29.js', './data/day30.js'
+  './data/day26.js', './data/day27.js', './data/day28.js', './data/day29.js', './data/day30.js',
+  './data/shorts.js'
 ];
 
 var INDEX = './index.html';

@@ -17,6 +17,20 @@
     { key: 'science', label: '과학' }
   ];
 
+  // 탭 순서: 여섯 과목 사이에 '국어영상'(김주혜 국어 쇼츠)을 넣는다.
+  // 국어영상은 과목 진행률(0/6)에는 넣지 않고 따로 표시한다.
+  var TABS = [
+    { key: 'math', label: '수학' },
+    { key: 'korean', label: '국어' },
+    { key: 'shorts', label: '국어영상' },
+    { key: 'english', label: '영어' },
+    { key: 'history', label: '한국사' },
+    { key: 'person', label: '위인' },
+    { key: 'science', label: '과학' }
+  ];
+
+  var SHORTS = (window.KIMJUHEA_SHORTS && window.KIMJUHEA_SHORTS.videos) || [];
+
   var WEEKDAY = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
 
   /* ---------------- state ---------------- */
@@ -24,15 +38,20 @@
   var S = loadState();
   var activeTab = 'math';
   var hintOpen = {};
+  var shortsPick = null;      // 지난 영상을 직접 골랐을 때 그 번호 (null이면 오늘 볼 영상)
+  var shortsPlay = null;      // 지금 재생 중인 영상 id
+  var shortsListAll = false;  // 지난 영상 전체 펼치기
 
   function loadState() {
-    var fallback = { startDate: dateKey(new Date()), day: null, theme: null, records: {} };
+    var fallback = { startDate: dateKey(new Date()), day: null, theme: null, records: {}, shorts: { watched: {} } };
     try {
       var raw = localStorage.getItem(STORE_KEY);
       if (!raw) return fallback;
       var parsed = JSON.parse(raw);
       if (!parsed || typeof parsed !== 'object') return fallback;
       parsed.records = parsed.records || {};
+      if (!parsed.shorts || typeof parsed.shorts !== 'object') parsed.shorts = { watched: {} };
+      if (!parsed.shorts.watched || typeof parsed.shorts.watched !== 'object') parsed.shorts.watched = {};
       if (!parsed.startDate) parsed.startDate = dateKey(new Date());
       return parsed;
     } catch (e) {
@@ -52,6 +71,45 @@
   }
 
   function todayKey() { return dateKey(new Date()); }
+
+  /* ---------------- 김주혜 국어 쇼츠 (하루 1편) ---------------- */
+
+  function shortsWatched() {
+    if (!S.shorts || typeof S.shorts !== 'object') S.shorts = {};
+    if (!S.shorts.watched || typeof S.shorts.watched !== 'object') S.shorts.watched = {};
+    return S.shorts.watched;
+  }
+
+  // 아직 안 본 첫 영상의 번호. 모두 봤으면 -1.
+  function shortsNextIndex() {
+    var w = shortsWatched();
+    for (var i = 0; i < SHORTS.length; i++) { if (!w[SHORTS[i].id]) return i; }
+    return -1;
+  }
+
+  function shortsIndexById(id) {
+    for (var i = 0; i < SHORTS.length; i++) { if (SHORTS[i].id === id) return i; }
+    return -1;
+  }
+
+  function shortsSeenCount() {
+    var w = shortsWatched(), n = 0;
+    for (var k in w) { if (shortsIndexById(k) >= 0) n++; }
+    return n;
+  }
+
+  function shortsTodayCount() {
+    var w = shortsWatched(), t = todayKey(), n = 0;
+    for (var k in w) { if (w[k] === t && shortsIndexById(k) >= 0) n++; }
+    return n;
+  }
+
+  function shortsDoneToday() { return shortsTodayCount() > 0; }
+
+  function shortsDateLabel(key) {
+    if (!key || key.length < 10) return '';
+    return (Number(key.slice(5, 7))) + '월 ' + (Number(key.slice(8, 10))) + '일';
+  }
 
   function dayDiff(a, b) {
     var pa = a.split('-').map(Number);
@@ -260,9 +318,10 @@
   function renderTabs() {
     var p = progressNow();
     var nav = document.getElementById('tabs');
-    nav.innerHTML = SUBJECTS.map(function (s) {
+    nav.innerHTML = TABS.map(function (s) {
       var on = s.key === activeTab;
-      return '<button class="tab' + (p.done[s.key] ? ' done' : '') + '" role="tab" data-act="tab" data-tab="' + s.key +
+      var done = s.key === 'shorts' ? shortsDoneToday() : !!p.done[s.key];
+      return '<button class="tab' + (done ? ' done' : '') + '" role="tab" data-act="tab" data-tab="' + s.key +
         '" aria-selected="' + (on ? 'true' : 'false') + '">' +
         '<span class="dot" aria-hidden="true"></span>' + esc(s.label) + '</button>';
     }).join('');
@@ -600,6 +659,108 @@
     return '<p class="done-flag">이 과목 완료</p>';
   }
 
+  /* ---------------- render: 김주혜 국어 쇼츠 ---------------- */
+
+  function shortsPlayer(v, playing) {
+    if (playing) {
+      var src = 'https://www.youtube.com/embed/' + v.id +
+        '?autoplay=1&playsinline=1&rel=0&modestbranding=1';
+      return '<div class="shorts-frame is-playing">' +
+        '<iframe src="' + src + '" title="' + esc(v.t) + '" allowfullscreen ' +
+        'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ' +
+        'referrerpolicy="strict-origin-when-cross-origin"></iframe></div>';
+    }
+    return '<div class="shorts-frame" role="button" tabindex="0" data-act="shortsPlay" data-id="' + v.id +
+      '" aria-label="영상 재생하기: ' + esc(v.t) + '">' +
+      '<img src="https://i.ytimg.com/vi/' + v.id + '/oar2.jpg" alt="" loading="lazy" referrerpolicy="no-referrer"' +
+      ' onerror="this.onerror=null;this.src=\'https://i.ytimg.com/vi/' + v.id + '/hqdefault.jpg\'">' +
+      '<span class="shorts-tag" aria-hidden="true">Shorts</span>' +
+      '<span class="shorts-play" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M8 5.3v13.4L19 12z"/></svg></span>' +
+      '</div>';
+  }
+
+  function shortsRowsHtml() {
+    var w = shortsWatched();
+    var rows = [];
+    for (var i = 0; i < SHORTS.length; i++) {
+      if (w[SHORTS[i].id]) rows.push({ i: i, d: w[SHORTS[i].id] });
+    }
+    rows.sort(function (a, b) {
+      if (a.d === b.d) return b.i - a.i;
+      return a.d < b.d ? 1 : -1;
+    });
+    if (!rows.length) return '';
+    var limit = shortsListAll ? rows.length : 6;
+    var out = rows.slice(0, limit).map(function (r) {
+      var v = SHORTS[r.i];
+      return '<button class="shorts-row" data-act="shortsPick" data-id="' + v.id + '">' +
+        '<span class="r-num">' + (r.i + 1) + '</span>' +
+        '<img src="https://i.ytimg.com/vi/' + v.id + '/mqdefault.jpg" alt="" loading="lazy" referrerpolicy="no-referrer">' +
+        '<span class="r-body"><span class="r-title">' + esc(v.t) + '</span>' +
+        '<span class="r-date">' + shortsDateLabel(r.d) + ' 봤어요</span></span></button>';
+    }).join('');
+    if (rows.length > limit) {
+      out += '<button class="btn ghost small" data-act="shortsMore" style="margin-top:10px">' +
+        '지난 영상 ' + (rows.length - limit) + '편 더 보기</button>';
+    } else if (shortsListAll && rows.length > 6) {
+      out += '<button class="btn ghost small" data-act="shortsMore" style="margin-top:10px">접기</button>';
+    }
+    return out;
+  }
+
+  function renderShorts() {
+    if (!SHORTS.length) {
+      return '<section class="card"><p class="q">국어 영상 목록을 불러오지 못했어요. 새로고침해 주세요.</p></section>';
+    }
+
+    var nextIdx = shortsNextIndex();
+    var idx = shortsPick !== null ? shortsPick : (nextIdx >= 0 ? nextIdx : SHORTS.length - 1);
+    if (idx < 0 || idx >= SHORTS.length) idx = 0;
+    var v = SHORTS[idx];
+    var isToday = shortsPick === null && nextIdx >= 0;
+    var playing = shortsPlay === v.id;
+    var watchedKey = shortsWatched()[v.id] || null;
+    var todayN = shortsTodayCount();
+    var seenN = shortsSeenCount();
+
+    var html = '';
+    html += '<section class="card shorts-card">';
+    html += '<div class="shorts-head"><span class="eyebrow">' + esc((window.KIMJUHEA_SHORTS && window.KIMJUHEA_SHORTS.channel) || '김주혜 국어') +
+      ' · 하루 1편</span><span class="shorts-count">' + (idx + 1) + ' / ' + SHORTS.length + '편</span></div>';
+    html += '<h2 class="shorts-title">' + esc(v.t) + '</h2>';
+    html += '<p class="shorts-kicker">' + (isToday ? '오늘 볼 영상' : (watchedKey ? '지난 영상 다시 보기' : '다음에 볼 영상')) + '</p>';
+    html += shortsPlayer(v, playing);
+
+    html += '<div class="shorts-actions">';
+    if (watchedKey) {
+      html += '<button class="btn ghost" data-act="shortsDone" data-id="' + v.id + '" disabled>✓ ' +
+        shortsDateLabel(watchedKey) + '에 봤어요</button>';
+    } else {
+      html += '<button class="btn done-btn" data-act="shortsDone" data-id="' + v.id + '">다 봤어요</button>';
+    }
+    html += '<a class="link-btn" href="https://www.youtube.com/shorts/' + v.id + '" target="_blank" rel="noopener">유튜브에서 열기</a>';
+    html += '</div>';
+
+    if (shortsPick !== null && nextIdx >= 0) {
+      html += '<div style="margin-top:8px"><button class="mini" data-act="shortsToday">오늘 볼 영상으로 돌아가기</button></div>';
+    }
+
+    html += '<div class="shorts-meta"><span>오늘 ' + todayN + '편 봤어요</span><span>지금까지 ' + seenN + ' / ' + SHORTS.length + '편</span></div>';
+    var pct = Math.round(seenN / SHORTS.length * 100);
+    html += '<div class="bar shorts-bar" role="progressbar" aria-label="국어 영상 진행률" aria-valuemin="0" aria-valuemax="' + SHORTS.length +
+      '" aria-valuenow="' + seenN + '"><i style="width:' + pct + '%;background:linear-gradient(90deg,#0d7a69,#7ee0c9)"></i></div>';
+    html += '</section>';
+
+    var rows = shortsRowsHtml();
+    if (rows) {
+      html += '<div class="section-head"><h2>지난 영상</h2><span>누르면 다시 볼 수 있어요</span></div>';
+      html += '<section class="card shorts-rows">' + rows + '</section>';
+    }
+
+    html += '<p class="shorts-note">영상은 유튜브에서 재생돼요. 불러오는 데 잠깐 걸릴 수 있어요.</p>';
+    return html;
+  }
+
   /* ---------------- render: all ---------------- */
 
   function render() {
@@ -608,6 +769,7 @@
     var html = '';
     if (activeTab === 'math') html = renderMath();
     else if (activeTab === 'korean') html = renderKorean();
+    else if (activeTab === 'shorts') html = renderShorts();
     else if (activeTab === 'english') html = renderEnglish();
     else if (activeTab === 'history') html = renderHistory();
     else if (activeTab === 'person') html = renderPerson();
@@ -668,6 +830,8 @@
     lines.push('완료 과목(' + doneList.length + '/' + SUBJECTS.length + '): ' + (doneList.length ? doneList.join(', ') : '아직 없음'));
     var ks = scoreOf(rec, 'k', 3);
     if (ks.answered) lines.push('국어 문법·독해: ' + ks.correct + '/' + 3 + ' 정답');
+    var sn = shortsTodayCount();
+    if (sn) lines.push('국어 영상(김주혜): 오늘 ' + sn + '편 시청');
     var hs = scoreOf(rec, 'h', 10);
     if (hs.answered) lines.push('한국사 퀴즈: ' + hs.correct + '/' + 10 + ' 정답');
     var ms = scoreOf(rec, 'm', 3);
@@ -715,6 +879,58 @@
       activeTab = t.getAttribute('data-tab');
       render();
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    if (act === 'shortsPlay') {
+      shortsPlay = t.getAttribute('data-id');
+      render();
+      return;
+    }
+
+    if (act === 'shortsDone') {
+      var sid = t.getAttribute('data-id');
+      var si = shortsIndexById(sid);
+      if (si < 0) return;
+      var sw = shortsWatched();
+      if (!sw[sid]) {
+        sw[sid] = todayKey();
+        saveState();
+        shortsPlay = null;
+        shortsPick = null;
+        render();
+        var nx = shortsNextIndex();
+        if (nx >= 0) {
+          toast('한 편 봤어요! 다음은 「' + SHORTS[nx].t + '」');
+        } else {
+          toast('준비한 ' + SHORTS.length + '편을 모두 봤어요!');
+        }
+      }
+      return;
+    }
+
+    if (act === 'shortsPick') {
+      var sk = t.getAttribute('data-id');
+      var skIdx = shortsIndexById(sk);
+      if (skIdx < 0) return;
+      shortsPick = skIdx;
+      shortsPlay = sk;
+      render();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    if (act === 'shortsToday') {
+      shortsPick = null;
+      shortsPlay = null;
+      render();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    if (act === 'shortsMore') {
+      shortsListAll = !shortsListAll;
+      render();
       return;
     }
 
